@@ -13,5 +13,12 @@ export interface User extends Identified {
 }
 
 export interface Room extends Identified {
-    players: User[]
+    players: User[],
+    status: string,
+}
+
+export interface Message {
+    move: string,
+    roomId: Mongoose.Types.ObjectId | string,
+    metadata?: any
 }

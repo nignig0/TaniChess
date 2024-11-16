@@ -1,8 +1,20 @@
 import express, { Request, Response} from 'express';
 import http from 'http';
 import WebSocket, { WebSocketServer } from 'ws';
+import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import authRouter from './routers/auth';
+
+dotenv.config();
+
+const mongoUri = process.env.MONGO_URI as string; // Type assertion for TypeScript
+mongoose.connect(mongoUri)
+.then(()=> console.log('Connected Boyyy'))
+.catch((e)=> console.log('Error connecting to the db ->', e));
+
 
 const app = express();
+app.use(express.json());
 const port = 5000;
 
 const server = http.createServer(app);
@@ -30,3 +42,5 @@ app.get('/', async(req: Request, res: Response)=>{
 app.listen(port, ()=>{
     console.log(`Listening on port ${port}. Let's go chess server`)
 })
+
+app.use('/auth', authRouter);
