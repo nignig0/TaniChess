@@ -7,6 +7,7 @@ import authRouter from './routers/auth';
 
 dotenv.config();
 
+
 const mongoUri = process.env.MONGO_URI as string; // Type assertion for TypeScript
 mongoose.connect(mongoUri)
 .then(()=> console.log('Connected Boyyy'))
