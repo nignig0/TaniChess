@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { Room } from "../types";
+import { Room } from "../types/types";
 import { RoomStatus } from "../constants/RoomStatus";
 
 const RoomSchema = new Schema<Room>({

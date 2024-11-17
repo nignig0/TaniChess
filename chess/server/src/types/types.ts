@@ -2,8 +2,8 @@ import Mongoose from 'mongoose';
 
 interface Identified {
     _id?: Mongoose.Types.ObjectId,
-    createdAt: Date,
-    updatedAt: Date
+    createdAt?: Date,
+    updatedAt?: Date
 }
 
 export interface User extends Identified {

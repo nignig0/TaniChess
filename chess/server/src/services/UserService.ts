@@ -14,7 +14,13 @@ const findByUsername = async (username: string)=>{
     return user;
 }
 
+const findById = async (userId: string)=>{
+    const user = await UserModel.findOne({_id: userId});
+    return user;
+}
+
 export const UserService = {
     createUser,
-    findByUsername
+    findByUsername,
+    findById
 }

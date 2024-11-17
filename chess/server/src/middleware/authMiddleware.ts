@@ -2,14 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import { TokenService } from '../services/TokenService';
 
 const requireUser = async(req: Request, res: Response, next: NextFunction)=>{
-    const token = req.headers.authorization;
-    if(!token){
-        res.status(403).send({
-            message: "Unauthorised access"
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(403).send({
+            message: "Unauthorized access",
         });
-        return;
     }
 
+    const token = authHeader.split(' ')[1];
     const decoded = await TokenService.verifyToken(token);
     if(!decoded){
         res.status(403).send({
@@ -17,6 +17,8 @@ const requireUser = async(req: Request, res: Response, next: NextFunction)=>{
         });
         return;
     }
+
+    req.user = decoded;
 
     next();
     return;
