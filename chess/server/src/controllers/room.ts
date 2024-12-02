@@ -18,9 +18,7 @@ const createRoom = async(req: Request, res: Response)=>{
 
         res.status(200).send({
             message: 'Success creating room!', 
-            data: {
-                roomId: room._id
-            }
+            data: room
         });
         return;
     }catch(err: any){
@@ -32,6 +30,28 @@ const createRoom = async(req: Request, res: Response)=>{
     }
 }
 
+const joinRoom = async(req: Request, res: Response)=>{
+    try{
+        const { roomId } = req.params;
+        const userId = req.user;
+        const playerData = await RoomService.joinRoom(roomId, userId);
+
+        res.status(200).send({
+            message: 'Successfully joined room',
+            data: playerData
+        });
+        return;
+
+    }catch(err: any){
+        console.log('Error Joining Room -> ', err);
+        res.status(500).send({
+            message: err.message
+        });
+        return;
+    }
+}
+
 export const RoomController = {
-    createRoom
+    createRoom,
+    joinRoom
 }

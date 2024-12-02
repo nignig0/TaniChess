@@ -4,6 +4,7 @@ import WebSocket, { WebSocketServer } from 'ws';
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRouter from './routers/auth';
+import roomRouter from './routers/room';
 
 dotenv.config();
 
@@ -45,3 +46,4 @@ app.listen(port, ()=>{
 })
 
 app.use('/auth', authRouter);
+app.use('/room', roomRouter);
