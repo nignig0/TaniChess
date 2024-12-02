@@ -12,8 +12,12 @@ export interface User extends Identified {
     password: string
 }
 
+
 export interface Room extends Identified {
-    players: User[],
+    players: {
+        userId: string,
+        color: string
+    }[],
     status: string,
 }
 

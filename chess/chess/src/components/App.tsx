@@ -1,14 +1,15 @@
 import React from 'react';
-import './../styles/App.css';
-import { ChessGame } from './ChessGame';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
+import { GamePage } from '../pages/gamePage';
 
 function App() {
   return (
-    <div className="App">
-      <h1>A chess game</h1>
-      <ChessGame/>
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element = {<GamePage/>} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;

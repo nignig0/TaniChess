@@ -3,8 +3,8 @@ import { UserModel } from "../models"
 const createUser = async (username: string, email: string, password: string)=>{
     const user = await UserModel.create({
         username: username, 
-        email: email,
-        password: password
+        email: email, //should add soome email validation
+        password: password //should also add some password validation
     });
     return user;
 }

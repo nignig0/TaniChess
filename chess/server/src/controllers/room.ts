@@ -2,19 +2,25 @@ import { Request, Response } from 'express';
 import { Room } from '../types/types';
 import { RoomStatus } from '../constants/RoomStatus';
 import { RoomService } from '../services/RoomService';
+import { Colors } from '../constants/Colors';
 
 const createRoom = async(req: Request, res: Response)=>{
     try{
         const roomObj: Room = {
-            players: [req.user!],
+            players: [{
+                userId: req.user as string,
+                color: Colors.WHITE
+            }],
             status: RoomStatus.pending
         };
 
-        await RoomService.createRoom(roomObj);
+        const room = await RoomService.createRoom(roomObj);
 
         res.status(200).send({
             message: 'Success creating room!', 
-            data: "Some room link"
+            data: {
+                roomId: room._id
+            }
         });
         return;
     }catch(err: any){

@@ -16,7 +16,7 @@ const register = async(req: Request, res: Response)=>{
             return;
         }
 
-        if(password != passwordConfirm){
+        if(password !== passwordConfirm){
             res.status(400).send({
                 message: "The password's do not match"
             });
