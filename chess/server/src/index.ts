@@ -25,7 +25,7 @@ const wss = new WebSocketServer({server});
 
 wss.on('connection', (ws: WebSocket)=>{
     console.log("New web socket connection!");
-
+    const clients = {};
     ws.on('message', (message: WebSocket.Data)=>{
         //process what happens here
     });
