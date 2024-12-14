@@ -41,7 +41,7 @@ app.get('/', async(req: Request, res: Response)=>{
     res.send("Let the chess begin!");
 })
 
-app.listen(port, ()=>{
+server.listen(port, ()=>{
     console.log(`Listening on port ${port}. Let's go chess server`)
 })
 
