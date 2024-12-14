@@ -26,6 +26,7 @@ const joinRoom = async(roomId: string, userId?: string)=>{
         userId: userId, 
         color: (currentPlayer.color == Colors.WHITE) ? Colors.BLACK : Colors.WHITE
     });
+    room.status = RoomStatus.active;
     room.save();
     return room.players[1];
 }
