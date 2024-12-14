@@ -24,10 +24,11 @@ const port = 5000;
 const server = http.createServer(app);
 
 const wss = new WebSocketServer({server});
+const clients = new Map<String, WebSocket[]>();
 
 wss.on('connection', (ws: WebSocket)=>{
     console.log("New web socket connection!");
-    const clients = new Map<String, WebSocket[]>();
+
     ws.on('message', (message: WebSocket.Data)=>{
         //process what happens here
         const data = JSON.parse(message.toString());

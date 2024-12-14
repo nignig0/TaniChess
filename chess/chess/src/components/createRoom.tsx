@@ -13,7 +13,7 @@ export function CreateRoomButton(){
             const response = request.data;
             console.log('The response -> ', response);
 
-            navigate(`/${response._id}`);
+            navigate(`/${response.data._id}`);
         }catch(err: any){
             alert('An unexpected error occured');
         } 

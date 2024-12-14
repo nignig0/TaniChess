@@ -8,7 +8,7 @@ import axios from "axios";
 
 export function GamePage(){
 
-    const socket = new WebSocket(`ws://${API_BASE}:5000`);
+    const socket = new WebSocket('ws://tanichess.onrender.com:5000');
     const navigate = useNavigate();
     const [waiting, setWaiting] = useState(true);
     const { roomId } = useParams<{roomId: string}>();
@@ -42,7 +42,7 @@ export function GamePage(){
     useEffect(()=>{
         //actually join the room
         const joinRoom = async(roomId: String)=>{
-            const request = await axios.put(`${API_BASE}/${roomId}`);
+            const request = await axios.put(`${API_BASE}/room/${roomId}`);
             const data = request.data;
             console.log('The data -> ', data);
             color = data.color;
