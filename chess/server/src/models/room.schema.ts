@@ -9,9 +9,15 @@ const RoomSchema = new Schema<Room>({
         default: RoomStatus.pending
     },
     players: [{
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: false
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+            required: false
+        }, 
+        color: {
+            type: String, 
+            required: true
+        }
     }]
 });
 
