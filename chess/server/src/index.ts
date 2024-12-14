@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import authRouter from './routers/auth';
 import roomRouter from './routers/room';
 import { init, propagateMessage } from './socket_functions';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ wss.on('connection', (ws: WebSocket)=>{
             const message = init(ws, roomId, clients);
             propagateMessage(roomId, clients, message);
         }else if(type == 'move'){
-            
+
         }
     });
 
@@ -51,6 +52,15 @@ wss.on('connection', (ws: WebSocket)=>{
 app.get('/', async(req: Request, res: Response)=>{
     res.send("Let the chess begin!");
 })
+
+const corsOptions = {
+    origin: 'http://localhost:3000',  // Allow requests from this origin
+    methods: ['GET', 'POST', 'PUT'],        // Allow specific methods
+    allowedHeaders: ['Content-Type'], // Allow specific headers
+  };
+  
+  // Use the CORS middleware
+  app.use(cors(corsOptions));
 
 server.listen(port, ()=>{
     console.log(`Listening on port ${port}. Let's go chess server`)
