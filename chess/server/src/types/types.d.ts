@@ -24,7 +24,7 @@ export interface Room extends Identified {
 export interface Message {
     type: string,
     canPlay?: boolean,
-    move?: string,
+    move?: [string],//a move has two strings starting and ending position
     roomId: Mongoose.Types.ObjectId | string,
     metadata?: any
 }

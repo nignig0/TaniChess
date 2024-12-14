@@ -7,6 +7,7 @@ import authRouter from './routers/auth';
 import roomRouter from './routers/room';
 import { init, propagateMessage } from './socket_functions';
 import cors from 'cors';
+import { Message } from './types/types';
 
 dotenv.config();
 
@@ -39,7 +40,14 @@ wss.on('connection', (ws: WebSocket)=>{
             const message = init(ws, roomId, clients);
             propagateMessage(roomId, clients, message);
         }else if(type == 'move'){
-
+            //we'll work on saving moves tomorrow
+            const { move } = data;
+            const message: Message = {
+                type: 'move',
+                move: move,
+                roomId: roomId
+            };
+            propagateMessage(roomId, clients, message);
         }
     });
 

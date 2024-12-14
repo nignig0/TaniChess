@@ -8,18 +8,18 @@ import axios from "axios";
 
 export function GamePage(){
 
-    const socket = new WebSocket('ws://tanichess.onrender.com:5000');
+    const socket = new WebSocket('wss://tanichess.onrender.com');
     const navigate = useNavigate();
     const [waiting, setWaiting] = useState(true);
     const { roomId } = useParams<{roomId: string}>();
-    let color: string;
+    const [color, setColor] = useState<string>('');
 
     useEffect(()=>{
        socket.addEventListener('open', ()=>{
         //send a message?
             console.log('Connected to the web socket server');
             socket.send(JSON.stringify({
-                type: 'join',
+                type: 'init',
                 roomId: roomId
             }));
        });
@@ -45,8 +45,9 @@ export function GamePage(){
             const request = await axios.put(`${API_BASE}/room/${roomId}`);
             const data = request.data;
             console.log('The data -> ', data);
-            color = data.color;
+            setColor(data.color);
         }
+
         try{
             joinRoom(roomId!)
         }catch(err:any){

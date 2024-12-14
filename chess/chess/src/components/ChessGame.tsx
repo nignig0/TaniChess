@@ -3,7 +3,6 @@ import { Chess, Piece, Square, Color } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import './../styles/ChessGame.css';
 
-const WS_URL = '';
 
 type boardProps = {
     color: string,
@@ -20,6 +19,8 @@ export function ChessGame({color, roomId, socket}: boardProps){
             const { type } = response;
             if(type == 'move'){
                 const { move } = response;
+                const [sourceSquare, targetSquare] = move;
+                handleMove(sourceSquare as Square, targetSquare as Square);
             }
         })
     }, [])
@@ -46,7 +47,12 @@ export function ChessGame({color, roomId, socket}: boardProps){
                 alert('It is not your turn');
                 return true;
             }
-            handleMove(sourceSquare, targetSquare);
+            socket.send(JSON.stringify({
+                type: 'move', 
+                move: [sourceSquare, targetSquare],
+                roomId: roomId
+            }));
+            //send the move
             return true;
         }catch(err:any){
             alert('Invalid move');
