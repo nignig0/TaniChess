@@ -16,22 +16,33 @@ const findRoomById = async(roomId: string)=>{
     return room;
 }
 
-const joinRoom = async(roomId: string, userId?: string)=>{
+const joinRoom = async(roomId: string, userId?: string, color: string = Colors.WHITE)=>{
     const room = await findRoomById(roomId);
     if(room.status != RoomStatus.pending) throw Error('You cannot join this room!');
     
-    const currentPlayer = room.players[0];
+    if(room.players.length == 0){
+        room.players.push({
+            userId: userId,
+            color: color
+        });
+        room.save();
+        return room.players[0];
+    }else{
+        const currentPlayer = room.players[0];
+        room.players.push({
+            userId: userId, 
+            color: (currentPlayer.color == Colors.WHITE) ? Colors.BLACK : Colors.WHITE
+        });
+        room.status = RoomStatus.active;
+        room.save();
+        return room.players[1];
+    }
 
-    room.players.push({
-        userId: userId, 
-        color: (currentPlayer.color == Colors.WHITE) ? Colors.BLACK : Colors.WHITE
-    });
-    room.status = RoomStatus.active;
-    room.save();
-    return room.players[1];
+    
 }
 
 export const RoomService = {
     createRoom,
-    joinRoom
+    joinRoom,
+    findRoomById
 }

@@ -7,10 +7,7 @@ import { Colors } from '../constants/Colors';
 const createRoom = async(req: Request, res: Response)=>{
     try{
         const roomObj: Room = {
-            players: [{
-                userId: req.user as string,
-                color: Colors.WHITE
-            }],
+            players: [],
             status: RoomStatus.pending
         };
 
@@ -34,7 +31,8 @@ const joinRoom = async(req: Request, res: Response)=>{
     try{
         const { roomId } = req.params;
         const userId = req.user;
-        const playerData = await RoomService.joinRoom(roomId, userId);
+        const { color } = req.body; 
+        const playerData = await RoomService.joinRoom(roomId, userId, color);
 
         res.status(200).send({
             message: 'Successfully joined room',
@@ -50,6 +48,7 @@ const joinRoom = async(req: Request, res: Response)=>{
         return;
     }
 }
+
 
 export const RoomController = {
     createRoom,

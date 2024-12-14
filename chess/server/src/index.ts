@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRouter from './routers/auth';
 import roomRouter from './routers/room';
+import { init, propagateMessage } from './socket_functions';
 
 dotenv.config();
 
@@ -25,9 +26,19 @@ const wss = new WebSocketServer({server});
 
 wss.on('connection', (ws: WebSocket)=>{
     console.log("New web socket connection!");
-    const clients = {};
+    const clients = new Map<String, WebSocket[]>();
     ws.on('message', (message: WebSocket.Data)=>{
         //process what happens here
+        const data = JSON.parse(message.toString());
+        console.log('The message -> ', data);
+        const { type, roomId } = data;
+
+        if(type == 'init'){
+            const message = init(ws, roomId, clients);
+            propagateMessage(roomId, clients, message);
+        }else if(type == 'move'){
+            
+        }
     });
 
     ws.on('close', ()=>{

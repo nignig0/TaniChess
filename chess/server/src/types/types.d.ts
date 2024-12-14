@@ -22,7 +22,9 @@ export interface Room extends Identified {
 }
 
 export interface Message {
-    move: string,
+    type: string,
+    canPlay?: boolean,
+    move?: string,
     roomId: Mongoose.Types.ObjectId | string,
     metadata?: any
 }
