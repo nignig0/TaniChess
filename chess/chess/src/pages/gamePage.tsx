@@ -41,11 +41,10 @@ export function GamePage(){
        return ()=>{
         socketRef.current!.close();
        };
-    }, []); //empty dependency array means I'll do this once when the component renders
+    }, []); //empty dependency array means it'll do this once when the component renders
 
     useEffect(()=>{
         //note when you refresh you rejoin the room. Change that on the backend
-        //actually join the room
         const joinRoom = async(roomId: String)=>{
             const request = await axios.put(`${API_BASE}/room/${roomId}`);
             const data = request.data.data;

@@ -20,9 +20,9 @@ export function ChessGame({color, roomId, socket}: boardProps){
             console.log('Reading from the board -> ', response);
             const { type } = response;
             if(type == 'move'){
-                const { move, game } = response;
+                const { move, fen } = response;
                 const [sourceSquare, targetSquare] = move;
-                handleMove(sourceSquare as Square, targetSquare as Square);
+                handleMove(sourceSquare as Square, targetSquare as Square, fen);
             }
         })
 
@@ -36,7 +36,9 @@ export function ChessGame({color, roomId, socket}: boardProps){
     
     const handleMove = (sourceSquare: Square, targetSquare: Square, fen: any)=>{
         try{
-            const copy = new Chess(game.fen()); //create a copy of the game state
+            const copy = new Chess(fen); //create a copy of the game state
+            //the game state is gotten from the server
+            //the server is the holder of truth
             console.log('copy turn -> ', copy.turn());
             const move = copy.move({ from: sourceSquare, to: targetSquare }); //make a move in that copy
             if (move == null) return false; //if it is an invlaid move, do nothing
@@ -56,15 +58,22 @@ export function ChessGame({color, roomId, socket}: boardProps){
     const handlePlayerMove = (sourceSquare: Square, targetSquare: Square)=>{
         try{
             console.log('game turn -> ', game.turn().toString());    
-            console.log('player color -> ', color);    
-            if(game.turn().toString() != playerTurn){
+            console.log('player color -> ', color); 
+            const colorCode = (color == 'WHITE' ? 'w' : 'b');   
+            if(game.turn().toString() != colorCode){
                 //alert('It is not your turn');
-                return true;
+                return false;
             }
+    
+            
+            handleMove(sourceSquare, targetSquare, game.fen()); //optimistically update the game
+            setPlayerTurn(game.turn());
+
             socket.send(JSON.stringify({
                 type: 'move', 
                 move: [sourceSquare, targetSquare],
-                roomId: roomId
+                roomId: roomId,
+                fen: game.fen()
             }));
             //send the move
             return true;

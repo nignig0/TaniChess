@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { API_BASE } from './App';
 import { useNavigate } from 'react-router-dom';
+import '../styles/createGameButton.css'
 
 export function CreateRoomButton(){
 
@@ -21,7 +22,7 @@ export function CreateRoomButton(){
 
     return (
         <button onClick = {createRoom}>
-            Create Game
+            CREATE GAME!
         </button>
     );
 }
