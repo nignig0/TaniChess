@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Game, Message } from "../types";
+import { useNavigate } from "react-router-dom";
 
 export function Lobby(){
     const [games, setGames] = useState<Game[]>([]);
@@ -24,13 +25,47 @@ export function Lobby(){
             console.log('Lobby Listener Message recieved -> ', data);
             //create the game fromm the data
             //add it to the list of games
-            setGames([
-                ...games
-            ])
+            if (data.type == 'lobby_listener'){
+                const newGame: Game = {
+                    roomId: data.roomId,
+                    player: data.player,
+                    color: data.color
+
+                }
+                setGames([
+                    newGame, 
+                    ...games
+                ]);
+            }else{
+                setGames(games.filter((g)=> g.roomId != data.roomId));
+            }
+            
         });
 
         return ()=>{
             socket.close();
         };
     }, []);
+
+    const navigate = useNavigate();
+
+    return (
+        <div>
+            <table>
+                <thead>
+                <th>Player</th>
+                <th>Color</th>
+                </thead>
+                {games.map((game)=>{
+                    return (
+                        <tr onClick={()=> navigate(`/${game.roomId}`)}>
+                            <td>{game.player}</td>
+                            <td>{game.color}</td>
+                        </tr>
+                    )
+                })}
+            </table>
+
+        </div>
+    );
 }

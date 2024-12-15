@@ -57,7 +57,8 @@ wss.on('connection', (ws: WebSocket)=>{
                 gameResponse = {
                     type: MessageTypes.LOBBY_LISTENER,
                     player: room!.players[0].username ?? "Anonymous",
-                    roomId: roomId
+                    roomId: roomId,
+                    color: room!.players[0].color
                 }
             }else{
                 gameResponse = {

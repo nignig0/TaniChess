@@ -27,5 +27,6 @@ export interface Message {
     move?: [string],//a move has two strings starting and ending position
     roomId?: string,
     fen?: any,
-    player?: string
+    player?: string,
+    color?: string
 }

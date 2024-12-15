@@ -8,6 +8,6 @@ export interface Message {
 
 export interface Game {
     roomId: string,
-    color: string, 
-    player: string
+    player: string,
+    color: string,
 }
