@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChessGame } from "../components/ChessGame";
 import './../styles/App.css';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -8,44 +8,51 @@ import axios from "axios";
 
 export function GamePage(){
 
-    const socket = new WebSocket('wss://tanichess.onrender.com');
+    const socketRef = useRef<WebSocket | null>(null);
+    //allows us to make something immutable between child and parent
+    //components
+    
     const navigate = useNavigate();
     const [waiting, setWaiting] = useState(true);
     const { roomId } = useParams<{roomId: string}>();
     const [color, setColor] = useState<string>('');
 
     useEffect(()=>{
-       socket.addEventListener('open', ()=>{
+        socketRef.current = new WebSocket('wss://tanichess.onrender.com');
+       socketRef.current.addEventListener('open', ()=>{
         //send a message?
             console.log('Connected to the web socket server');
-            socket.send(JSON.stringify({
+            socketRef.current!.send(JSON.stringify({
                 type: 'init',
                 roomId: roomId
             }));
        });
 
-       socket.addEventListener('message', (event)=>{
+       socketRef.current.addEventListener('message', (event)=>{
         const response = JSON.parse(event.data);
         console.log('New message from the server socket -> ', response);
         const { type } = response;
         if(type == 'init'){
-            setWaiting(response.canPlay);
+            setWaiting(!response.canPlay);
         }
        });
 
        //clean up when the component unmounts
        return ()=>{
-        socket.close();
+        socketRef.current!.close();
        };
     }, []); //empty dependency array means I'll do this once when the component renders
 
     useEffect(()=>{
+        //note when you refresh you rejoin the room. Change that on the backend
         //actually join the room
         const joinRoom = async(roomId: String)=>{
             const request = await axios.put(`${API_BASE}/room/${roomId}`);
-            const data = request.data;
+            const data = request.data.data;
             console.log('The data -> ', data);
             setColor(data.color);
+            console.log('The request color -> ', data.color)
+            console.log('The players color -> ', color);
         }
 
         try{
@@ -67,10 +74,18 @@ export function GamePage(){
             </div>
         )
         :
+        color == ''
+        ?
+        (
+        <div>
+            <h1>Loading...</h1>
+        </div>
+        )
+        :
         (
             <div className="App">
                 <h1>A chess game</h1>
-                <ChessGame color={color!} roomId= {roomId!} socket = {socket}/>
+                <ChessGame color={color!} roomId= {roomId!} socket = {socketRef.current!}/>
             </div>
         )
     );

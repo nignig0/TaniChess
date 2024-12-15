@@ -26,5 +26,5 @@ export interface Message {
     canPlay?: boolean,
     move?: [string],//a move has two strings starting and ending position
     roomId: Mongoose.Types.ObjectId | string,
-    metadata?: any
+    game?: any
 }
