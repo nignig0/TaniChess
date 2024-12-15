@@ -41,12 +41,12 @@ wss.on('connection', (ws: WebSocket)=>{
             propagateMessage(roomId, clients, message);
         }else if(type == 'move'){
             //we'll work on saving moves tomorrow
-            const { move, game } = data;
+            const { move, fen } = data;
             const message: Message = {
                 type: 'move',
                 move: move,
                 roomId: roomId,
-                game: game
+                fen: fen
             };
             propagateMessage(roomId, clients, message);
         }

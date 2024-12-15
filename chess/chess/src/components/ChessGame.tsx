@@ -20,7 +20,7 @@ export function ChessGame({color, roomId, socket}: boardProps){
             console.log('Reading from the board -> ', response);
             const { type } = response;
             if(type == 'move'){
-                const { move } = response;
+                const { move, game } = response;
                 const [sourceSquare, targetSquare] = move;
                 handleMove(sourceSquare as Square, targetSquare as Square);
             }
@@ -34,7 +34,7 @@ export function ChessGame({color, roomId, socket}: boardProps){
         // };
     }, [socket])
     
-    const handleMove = (sourceSquare: Square, targetSquare: Square)=>{
+    const handleMove = (sourceSquare: Square, targetSquare: Square, fen: any)=>{
         try{
             const copy = new Chess(game.fen()); //create a copy of the game state
             console.log('copy turn -> ', copy.turn());
