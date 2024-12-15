@@ -1,3 +1,4 @@
+import { MessageTypes } from "./constants/sockets";
 import { Message } from "./types/types";
 import WebSocket from 'ws';
 
@@ -24,8 +25,9 @@ export const init = (ws: WebSocket, roomId: string, clients: Map<String, WebSock
     return message;           
 }
 
-export const propagateMessage = (roomId: String, clients: Map<String, WebSocket[]>, message: Message)=>{
-    const sockets = clients.get(roomId);
+export const propagateMessage = (key: string, clients: Map<string, WebSocket[]>, message: Message)=>{
+    //key can be a roomId or something else
+    const sockets = clients.get(key);
     if(!sockets){
         console.log('This room does not exist');
         return;
@@ -35,4 +37,10 @@ export const propagateMessage = (roomId: String, clients: Map<String, WebSocket[
         socket.send(JSON.stringify(message));
     }
 
+}
+
+export const handleLobbyListeners = (client: Map<string, WebSocket[]>, socket: WebSocket)=>{
+    if(!client.has(MessageTypes.LOBBY_LISTENER)) client.set(MessageTypes.LOBBY_LISTENER, []); 
+
+    client.get(MessageTypes.LOBBY_LISTENER)!.push(socket);
 }

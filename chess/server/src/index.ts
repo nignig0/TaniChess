@@ -5,9 +5,12 @@ import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRouter from './routers/auth';
 import roomRouter from './routers/room';
-import { init, propagateMessage } from './socket_functions';
+import { handleLobbyListeners, init, propagateMessage } from './socket_functions';
 import cors from 'cors';
 import { Message } from './types/types';
+import { MessageTypes } from './constants/sockets';
+import { RoomService } from './services/RoomService';
+import e from 'express';
 
 dotenv.config();
 
@@ -25,20 +28,50 @@ const port = 5000;
 const server = http.createServer(app);
 
 const wss = new WebSocketServer({server});
-const clients = new Map<String, WebSocket[]>();
+const clients = new Map<string, WebSocket[]>();
 
 wss.on('connection', (ws: WebSocket)=>{
     console.log("New web socket connection!");
 
-    ws.on('message', (message: WebSocket.Data)=>{
+    ws.on('message', async (message: WebSocket.Data)=>{
         //process what happens here
-        const data = JSON.parse(message.toString());
+        const rawData = JSON.parse(message.toString());
+        const data: Message = {
+            type: rawData.type,
+            canPlay: rawData.canPlay,
+            move: rawData.move,
+            roomId: rawData.roomId,
+            fen: rawData.fen
+        };
         console.log('The message -> ', data);
         const { type, roomId } = data;
 
         if(type == 'init'){
-            const message = init(ws, roomId, clients);
-            propagateMessage(roomId, clients, message);
+            const message = init(ws, roomId!, clients);
+            propagateMessage(roomId!, clients, message);
+            const room = await RoomService.findRoomById(roomId!);
+
+            let gameResponse:Message;
+
+            if(room!.players.length == 1){
+                gameResponse = {
+                    type: MessageTypes.LOBBY_LISTENER,
+                    player: room!.players[0].username ?? "Anonymous",
+                    roomId: roomId
+                }
+            }else{
+                gameResponse = {
+                    type: MessageTypes.GAME_REMOVE,
+                    roomId: roomId
+                }
+            }
+
+            //if there is only one person in the room
+            //send to all the lobby listeners
+            //if someone else has joined the room
+            //then send a message to remove from the lobby
+
+            propagateMessage(MessageTypes.LOBBY_LISTENER, clients, gameResponse);
         }else if(type == 'move'){
             //we'll work on saving moves tomorrow
             const { move, fen } = data;
@@ -48,7 +81,9 @@ wss.on('connection', (ws: WebSocket)=>{
                 roomId: roomId,
                 fen: fen
             };
-            propagateMessage(roomId, clients, message);
+            propagateMessage(roomId!, clients, message);
+        }else if(type == MessageTypes.LOBBY_LISTENER){
+            handleLobbyListeners(clients, ws);
         }
     });
 

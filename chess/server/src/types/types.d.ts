@@ -15,7 +15,7 @@ export interface User extends Identified {
 
 export interface Room extends Identified {
     players: {
-        userId?: string,
+        username?: string,
         color: string
     }[],
     status: string,
@@ -25,6 +25,7 @@ export interface Message {
     type: string,
     canPlay?: boolean,
     move?: [string],//a move has two strings starting and ending position
-    roomId: Mongoose.Types.ObjectId | string,
-    fen?: any
+    roomId?: string,
+    fen?: any,
+    player?: string
 }

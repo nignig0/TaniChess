@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Chess, Piece, Square, Color } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import './../styles/ChessGame.css';
+import { useNavigate } from 'react-router-dom';
 
 
 type boardProps = {
@@ -12,8 +13,8 @@ type boardProps = {
 
 export function ChessGame({color, roomId, socket}: boardProps){
     const [game, setGame] = useState(new Chess()); //this initializes the game
-    const [playerTurn, setPlayerTurn] = useState(color === 'WHITE' ? 'w' : 'b');
-
+    const navigate = useNavigate();
+    
     useEffect(()=>{
         socket.addEventListener('message', (event)=>{
             const response = JSON.parse(event.data);
@@ -43,9 +44,14 @@ export function ChessGame({color, roomId, socket}: boardProps){
             const move = copy.move({ from: sourceSquare, to: targetSquare }); //make a move in that copy
             if (move == null) return false; //if it is an invlaid move, do nothing
             setGame(copy); //change the state
-            setPlayerTurn(copy.turn()); // Update the turn state
             //send the move to the backend somewhere here
             console.log('After move - copy turn -> ', copy.turn());
+            if(copy.isCheckmate()){
+                const colorCode = (color == 'WHITE' ? 'w' : 'b'); 
+                const message = (copy.turn()!= colorCode) ? 'Congratulations! You won' : 'Game over! Better luck next time';
+                alert(message);
+                navigate('/'); //navigate to home... wherever this is
+            }
             return true;
         }catch(err:any){
             console.log('Error making move ->', err);
@@ -67,7 +73,6 @@ export function ChessGame({color, roomId, socket}: boardProps){
     
             
             handleMove(sourceSquare, targetSquare, game.fen()); //optimistically update the game
-            setPlayerTurn(game.turn());
 
             socket.send(JSON.stringify({
                 type: 'move', 

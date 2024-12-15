@@ -16,13 +16,13 @@ const findRoomById = async(roomId: string)=>{
     return room;
 }
 
-const joinRoom = async(roomId: string, userId?: string, color: string = Colors.WHITE)=>{
+const joinRoom = async(roomId: string, username?: string, color: string = Colors.WHITE)=>{
     const room = await findRoomById(roomId);
     if(room.status != RoomStatus.pending) throw Error('You cannot join this room!');
     
     if(room.players.length == 0){
         room.players.push({
-            userId: userId,
+            username: username,
             color: color
         });
         room.save();
@@ -30,7 +30,7 @@ const joinRoom = async(roomId: string, userId?: string, color: string = Colors.W
     }else{
         const currentPlayer = room.players[0];
         room.players.push({
-            userId: userId, 
+            username: username, 
             color: (currentPlayer.color == Colors.WHITE) ? Colors.BLACK : Colors.WHITE
         });
         room.status = RoomStatus.active;
