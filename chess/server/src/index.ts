@@ -109,7 +109,7 @@ app.get('/', async(req: Request, res: Response)=>{
 })
 
 const corsOptions = {
-    origin: ['http://localhost:3000','https://64squareschess.netlify.app/'],  // Allow requests from this origin
+    origin: ['http://localhost:3000','https://64squareschess.netlify.app'],  // Allow requests from this origin
     methods: ['GET', 'POST', 'PUT'],        // Allow specific methods
     allowedHeaders: ['Content-Type'], // Allow specific headers
   };
