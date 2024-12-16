@@ -23,3 +23,17 @@ a {
   color: black;
   margin: 5px;
 }
+
+.lobbyButton{
+    height: 50px;
+    width: 150px;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    border: solid;
+}
+
+.lobbyButton:hover{
+  color: white;
+  background-color: black;
+}

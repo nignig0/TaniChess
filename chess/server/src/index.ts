@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import authRouter from './routers/auth';
 import roomRouter from './routers/room';
-import { handleLobbyListeners, init, propagateMessage } from './socket_functions';
+import { handleLobbyListeners, init, propagateLobbyGames, propagateMessage } from './socket_functions';
 import cors from 'cors';
 import { Message } from './types/types';
 import { MessageTypes } from './constants/sockets';
@@ -29,6 +29,9 @@ const server = http.createServer(app);
 
 const wss = new WebSocketServer({server});
 const clients = new Map<string, WebSocket[]>();
+clients.set(MessageTypes.LOBBY_LISTENER, []);
+
+let lobbyGames: Message[] = [];
 
 wss.on('connection', (ws: WebSocket)=>{
     console.log("New web socket connection!");
@@ -51,20 +54,20 @@ wss.on('connection', (ws: WebSocket)=>{
             propagateMessage(roomId!, clients, message);
             const room = await RoomService.findRoomById(roomId!);
 
-            let gameResponse:Message;
 
             if(room!.players.length <= 1){
-                gameResponse = {
+                const gameResponse = {
                     type: MessageTypes.LOBBY_LISTENER,
-                    player: room!.players[0].username ?? "Anonymous",
+                    player: (!room!.players[0] || room!.players[0].username) ?? "Anonymous",
                     roomId: roomId,
                     color: room!.players[0].color
                 }
+                lobbyGames = [
+                    gameResponse,
+                    ...lobbyGames
+                ];
             }else{
-                gameResponse = {
-                    type: MessageTypes.GAME_REMOVE,
-                    roomId: roomId
-                }
+                lobbyGames = lobbyGames.filter((g:Message)=> g.roomId != roomId)
             }
 
             //if there is only one person in the room
@@ -72,7 +75,7 @@ wss.on('connection', (ws: WebSocket)=>{
             //if someone else has joined the room
             //then send a message to remove from the lobby
 
-            propagateMessage(MessageTypes.LOBBY_LISTENER, clients, gameResponse);
+            propagateLobbyGames(clients, lobbyGames)
         }else if(type == 'move'){
             //we'll work on saving moves tomorrow
             const { move, fen } = data;

@@ -40,7 +40,15 @@ export const propagateMessage = (key: string, clients: Map<string, WebSocket[]>,
 }
 
 export const handleLobbyListeners = (client: Map<string, WebSocket[]>, socket: WebSocket)=>{
-    if(!client.has(MessageTypes.LOBBY_LISTENER)) client.set(MessageTypes.LOBBY_LISTENER, []); 
-
     client.get(MessageTypes.LOBBY_LISTENER)!.push(socket);
+}
+
+export const propagateLobbyGames = (clients: Map<string, WebSocket[]>, messages: Message[])=>{
+    for(const client of clients.get(MessageTypes.LOBBY_LISTENER)!){
+        const message = JSON.stringify({
+            type: MessageTypes.LOBBY_LISTENER,
+            lobbyGames: messages
+        });
+        client.send(message);
+    }
 }

@@ -28,5 +28,6 @@ export interface Message {
     roomId?: string,
     fen?: any,
     player?: string,
-    color?: string
+    color?: string,
+    lobbyGames?: Message[]
 }

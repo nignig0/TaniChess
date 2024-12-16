@@ -27,18 +27,7 @@ export function Lobby(){
             //create the game fromm the data
             //add it to the list of games
             if (data.type == 'lobby_listener'){
-                const newGame: Game = {
-                    roomId: data.roomId,
-                    player: data.player,
-                    color: data.color
-
-                }
-                setGames([
-                    newGame, 
-                    ...games
-                ]);
-            }else{
-                setGames(games.filter((g)=> g.roomId != data.roomId));
+                setGames(data.lobbyGames);
             }
             
         });
