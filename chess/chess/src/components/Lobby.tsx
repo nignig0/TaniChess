@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Game, Message } from "../types";
 import { useNavigate } from "react-router-dom";
+import '../styles/lobby.css';
 
 export function Lobby(){
     const [games, setGames] = useState<Game[]>([]);
@@ -50,22 +51,23 @@ export function Lobby(){
     const navigate = useNavigate();
 
     return (
-        <div>
             <table>
                 <thead>
+                <tr>
                 <th>Player</th>
                 <th>Color</th>
+                </tr>
                 </thead>
+                <tbody>
                 {games.map((game)=>{
                     return (
-                        <tr onClick={()=> navigate(`/${game.roomId}`)}>
+                        <tr key={game.roomId}onClick={()=> navigate(`/${game.roomId}`)}>
                             <td>{game.player}</td>
                             <td>{game.color}</td>
                         </tr>
                     )
                 })}
+                </tbody>
             </table>
-
-        </div>
     );
 }

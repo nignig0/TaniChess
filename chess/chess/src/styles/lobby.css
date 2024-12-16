@@ -1,0 +1,23 @@
+table{
+    width: 30%;
+}
+th{
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+td{
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+tr:hover{
+    background-color: black;
+    color: white
+}
+
+.lobbyDiv{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
