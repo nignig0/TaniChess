@@ -31,10 +31,13 @@ export function Index(){
             
             
         }
+        <div className='buttonHolder'>
             <button className='lobbyButton' onClick = {()=> navigate('/lobby')}>
-                Check Lobby!
+                CHECK LOBBY!
             </button>
             <CreateRoomButton/>
+        </div>
+            
             <p>You can play anonymously but you won't be able to view past games</p>
         </div>
     );

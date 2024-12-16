@@ -1,0 +1,11 @@
+.nameHolder{
+    display: flex;
+    justify-content: start;
+    width: 35%;
+    margin:0;
+    padding: 0;
+}
+
+h2{
+    margin: 0;
+}

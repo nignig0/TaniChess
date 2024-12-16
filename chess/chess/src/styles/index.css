@@ -6,22 +6,27 @@
   justify-content: center;
   align-items: center;
   background-size: cover;
+  
 }
 
 h1{
   padding: 0;
   margin: 0;
+  font-family: 'Charm';
+  font-size: 55px;
 }
 
 p{
-  padding: 10px;
+  padding: 5px;
   margin: 0;
+  font-family: 'Charm';
 }
 
 a {
   text-decoration: none;
   color: black;
   margin: 5px;
+  font-family: 'Charm';
 }
 
 .lobbyButton{
@@ -36,4 +41,8 @@ a {
 .lobbyButton:hover{
   color: white;
   background-color: black;
+}
+
+.buttonHolder{
+  display: flex;
 }

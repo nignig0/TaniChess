@@ -29,7 +29,10 @@ const server = http.createServer(app);
 
 const wss = new WebSocketServer({server});
 const clients = new Map<string, WebSocket[]>();
+//this is a room to socket map
 clients.set(MessageTypes.LOBBY_LISTENER, []);
+
+const socketToRoomMap = new Map<WebSocket, string[]>();
 
 let lobbyGames: Message[] = [];
 
@@ -50,7 +53,7 @@ wss.on('connection', (ws: WebSocket)=>{
         const { type, roomId } = data;
 
         if(type == 'init'){
-            const message = init(ws, roomId!, clients);
+            const message = init(ws, roomId!, clients, socketToRoomMap);
             propagateMessage(roomId!, clients, message);
             const room = await RoomService.findRoomById(roomId!);
 
@@ -92,6 +95,9 @@ wss.on('connection', (ws: WebSocket)=>{
     });
 
     ws.on('close', ()=>{
+        //handle socket closing here
+        //loop through everything here and remove it from the
+        //lobby array if its there
         console.log("Connection closed");
         //handle what happens if the client closes the connection 
         //or there's an error and the connection has to be closed.

@@ -97,6 +97,7 @@ export function ChessGame({color, roomId, socket}: boardProps){
                 onPieceDrop = {handlePlayerMove}
                 boardOrientation= {color == 'WHITE' ? 'white' : 'black'}
             />
+            
         </div>
     );
 }

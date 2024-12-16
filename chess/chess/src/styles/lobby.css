@@ -1,5 +1,5 @@
 table{
-    width: 30%;
+    width: 50%;
 }
 th{
     border-top: 1px solid;
@@ -19,5 +19,8 @@ tr:hover{
 .lobbyDiv{
     display: flex;
     width: 100%;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    
 }

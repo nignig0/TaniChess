@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { API_BASE } from "../components/App";
 import axios from "axios";
 import { ChessLoader } from "../components/Loader";
+import { NameHolder } from "../components/NameHolder";
 
 
 export function GamePage(){
@@ -78,8 +79,9 @@ export function GamePage(){
         :
         (
             <div className="App">
-                <h1>A chess game</h1>
+                <NameHolder color = {color! == 'WHITE'? 'BLACK' : 'WHITE'}/>
                 <ChessGame color={color!} roomId= {roomId!} socket = {socketRef.current!}/>
+                <NameHolder color = {color!} />
             </div>
         )
     );

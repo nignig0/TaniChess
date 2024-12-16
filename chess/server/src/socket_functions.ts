@@ -2,25 +2,28 @@ import { MessageTypes } from "./constants/sockets";
 import { Message } from "./types/types";
 import WebSocket from 'ws';
 
-export const init = (ws: WebSocket, roomId: string, clients: Map<String, WebSocket[]>)=>{
+export const init = (ws: WebSocket, roomId: string, clients: Map<String, WebSocket[]>, socketToRoomMap: Map<WebSocket, string[]>)=>{
     if(!clients.has(roomId)) clients.set(roomId, []);
     
     clients.get(roomId)!.push(ws);
 
-        let message: Message;
-        if(clients.get(roomId)!.length < 2){
-            message = {
-                type: 'init',
-                roomId: roomId,
-                canPlay: false
-            };
-        }else{
-            message = {
-                type: 'init',
-                roomId: roomId,
-                canPlay: true
-            }
-        }
+    let message: Message;
+    if(clients.get(roomId)!.length < 2){
+        message = {
+            type: 'init',
+            roomId: roomId,
+            canPlay: false
+        };
+    }else{
+        message = {
+            type: 'init',
+            roomId: roomId,
+            canPlay: true
+        };
+    }
+
+    if(!socketToRoomMap.has(ws)) socketToRoomMap.set(ws, []);
+    socketToRoomMap.get(ws)!.push(roomId);
 
     return message;           
 }
