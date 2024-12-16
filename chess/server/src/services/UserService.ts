@@ -19,8 +19,21 @@ const findById = async (userId: string)=>{
     return user;
 }
 
+const doesUserExist = async(username: string, email: string)=>{
+    const user = await UserModel.findOne({
+        $or: [{
+            username: username
+        }, {
+            email: email
+        }]
+    });
+
+    return user != null;
+}
+
 export const UserService = {
     createUser,
     findByUsername,
-    findById
+    findById,
+    doesUserExist
 }

@@ -1,0 +1,18 @@
+nav{
+    background-color: rgba(206, 206, 206, 0.228);
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    margin: 0;
+}
+
+ul{
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+
+li{
+    text-decoration: underline;
+    font-weight: bold;
+}

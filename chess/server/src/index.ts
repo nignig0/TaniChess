@@ -50,10 +50,10 @@ wss.on('connection', (ws: WebSocket)=>{
             fen: rawData.fen
         };
         console.log('The message -> ', data);
-        const { type, roomId } = data;
+        const { type, roomId, player } = data;
 
         if(type == 'init'){
-            const message = init(ws, roomId!, clients, socketToRoomMap);
+            const message = init(ws, roomId!, clients, socketToRoomMap, player);
             propagateMessage(roomId!, clients, message);
             const room = await RoomService.findRoomById(roomId!);
 
@@ -90,7 +90,7 @@ wss.on('connection', (ws: WebSocket)=>{
             };
             propagateMessage(roomId!, clients, message);
         }else if(type == MessageTypes.LOBBY_LISTENER){
-            handleLobbyListeners(clients, ws);
+            handleLobbyListeners(clients, ws, lobbyGames);
         }
     });
 

@@ -23,6 +23,14 @@ const register = async(req: Request, res: Response)=>{
             return;
         }
 
+        const userExists = await UserService.doesUserExist(username, email);
+        if(userExists){
+            res.status(400).send({
+                message: 'Username or Email exists'
+            });
+            return;
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await UserService.createUser(username, email, hashedPassword);
         

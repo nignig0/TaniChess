@@ -25,7 +25,7 @@ export function ChessGame({color, roomId, socket}: boardProps){
                 const [sourceSquare, targetSquare] = move;
                 handleMove(sourceSquare as Square, targetSquare as Square, fen);
             }
-        })
+        });
 
         // return () => {
         //     if (socket) {

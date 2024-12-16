@@ -18,11 +18,24 @@ export function GamePage(){
     const [waiting, setWaiting] = useState(true);
     const { roomId } = useParams<{roomId: string}>();
     const [color, setColor] = useState<string>('');
+    const [opponent, setOpponent] = useState<string>('');
 
     useEffect(()=>{
         //note when you refresh you rejoin the room. Change that on the backend
         const joinRoom = async(roomId: String)=>{
-            const request = await axios.put(`${API_BASE}/room/${roomId}`);
+            let request;
+            
+            if(localStorage.getItem('token')){
+                const token = localStorage.getItem('token');
+                request = await axios.put(`${API_BASE}/room/${roomId}`, undefined, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+            }else{
+                request = await axios.put(`${API_BASE}/room/${roomId}`);
+            }
+            
             const data = request.data.data;
             console.log('The data -> ', data);
             setColor(data.color);
@@ -44,18 +57,21 @@ export function GamePage(){
         socketRef.current = new WebSocket('wss://tanichess.onrender.com');
         socketRef.current.addEventListener('open', ()=>{
         //send a message?
+        const player = localStorage.getItem('username') ?? 'Anonymous';
             console.log('Connected to the web socket server');
             socketRef.current!.send(JSON.stringify({
                 type: 'init',
-                roomId: roomId
+                roomId: roomId,
+                player: player
             }));
        });
 
        socketRef.current.addEventListener('message', (event)=>{
         const response = JSON.parse(event.data);
         console.log('New message from the server socket -> ', response);
-        const { type } = response;
+        const { type, player } = response;
         if(type == 'init'){
+            if(response.canPlay) setOpponent(player);
             setWaiting(!response.canPlay);
         }
        });
@@ -68,7 +84,7 @@ export function GamePage(){
 
     
     return (
-        (waiting || color == '')?
+        (waiting || color == '' || opponent == '')?
         (
             <div className = 'loader'>
                 <ChessLoader/>
@@ -79,9 +95,9 @@ export function GamePage(){
         :
         (
             <div className="App">
-                <NameHolder color = {color! == 'WHITE'? 'BLACK' : 'WHITE'}/>
+                <NameHolder color = {color! == 'WHITE'? 'BLACK' : 'WHITE'} name={opponent}/>
                 <ChessGame color={color!} roomId= {roomId!} socket = {socketRef.current!}/>
-                <NameHolder color = {color!} />
+                <NameHolder color = {color!} name = {localStorage.getItem('username') ?? 'Anonymous'}/>
             </div>
         )
     );

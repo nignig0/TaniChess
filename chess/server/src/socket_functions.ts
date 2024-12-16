@@ -2,7 +2,7 @@ import { MessageTypes } from "./constants/sockets";
 import { Message } from "./types/types";
 import WebSocket from 'ws';
 
-export const init = (ws: WebSocket, roomId: string, clients: Map<String, WebSocket[]>, socketToRoomMap: Map<WebSocket, string[]>)=>{
+export const init = (ws: WebSocket, roomId: string, clients: Map<String, WebSocket[]>, socketToRoomMap: Map<WebSocket, string[]>, player: string = 'Anonymous')=>{
     if(!clients.has(roomId)) clients.set(roomId, []);
     
     clients.get(roomId)!.push(ws);
@@ -12,13 +12,15 @@ export const init = (ws: WebSocket, roomId: string, clients: Map<String, WebSock
         message = {
             type: 'init',
             roomId: roomId,
-            canPlay: false
+            canPlay: false,
+            player: player
         };
     }else{
         message = {
             type: 'init',
             roomId: roomId,
-            canPlay: true
+            canPlay: true,
+            player: player
         };
     }
 
@@ -42,8 +44,13 @@ export const propagateMessage = (key: string, clients: Map<string, WebSocket[]>,
 
 }
 
-export const handleLobbyListeners = (client: Map<string, WebSocket[]>, socket: WebSocket)=>{
+export const handleLobbyListeners = (client: Map<string, WebSocket[]>, socket: WebSocket, messages: Message[])=>{
     client.get(MessageTypes.LOBBY_LISTENER)!.push(socket);
+    const message = JSON.stringify({
+        type: MessageTypes.LOBBY_LISTENER,
+        lobbyGames: messages
+    });
+    socket.send(message); //get the socket up to speed
 }
 
 export const propagateLobbyGames = (clients: Map<string, WebSocket[]>, messages: Message[])=>{

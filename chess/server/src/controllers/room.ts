@@ -38,8 +38,7 @@ const joinRoom = async(req: Request, res: Response)=>{
             const user = await UserService.findById(userId);
             username = user!.username;
         }
-        const { color } = req.body; 
-        const playerData = await RoomService.joinRoom(roomId, username, color);
+        const playerData = await RoomService.joinRoom(roomId, username);
 
         res.status(200).send({
             message: 'Successfully joined room',

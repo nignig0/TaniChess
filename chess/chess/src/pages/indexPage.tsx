@@ -9,6 +9,8 @@ export function Index(){
 
     const changeForm = async()=> setShowLoginForm(!showLoginForm);
     const navigate = useNavigate();
+
+    if(localStorage.getItem('token')) navigate('/lobby');
     return (
         <div className='body'>
             <h1>64 Squares</h1>

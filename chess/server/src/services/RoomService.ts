@@ -16,7 +16,9 @@ const findRoomById = async(roomId: string)=>{
     return room;
 }
 
-const joinRoom = async(roomId: string, username?: string, color: string = Colors.WHITE)=>{
+const joinRoom = async(roomId: string, username?: string)=>{
+    const randomNum = Math.floor(Math.random() * 2); //returns only 0 or 1
+    const color = (randomNum == 0)? Colors.WHITE : Colors.BLACK;
     const room = await findRoomById(roomId);
     if(room.status != RoomStatus.pending) throw Error('You cannot join this room!');
     
