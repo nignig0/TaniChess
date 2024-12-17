@@ -20,6 +20,7 @@ export function GamePage(){
     const { roomId } = useParams<{roomId: string}>();
     const [color, setColor] = useState<string>('');
     const [opponent, setOpponent] = useState<string>('');
+    const [joinedRoom, setJoinedRoom] = useState(false);
 
     useEffect(()=>{
         //note when you refresh you rejoin the room. Change that on the backend
@@ -40,6 +41,7 @@ export function GamePage(){
             const data = request.data.data;
             console.log('The data -> ', data);
             setColor(data.color);
+            setJoinedRoom(true);
             console.log('The request color -> ', data.color)
             console.log('The players color -> ', color);
         }
@@ -81,7 +83,7 @@ export function GamePage(){
        return ()=>{
         socketRef.current!.close();
        };
-    }, []); //empty dependency array means it'll do this once when the component renders
+    }, [joinedRoom]); //empty dependency array means it'll do this once when the component renders
 
     
     return (
