@@ -6,6 +6,7 @@ import { API_BASE } from "../components/App";
 import axios from "axios";
 import { ChessLoader } from "../components/Loader";
 import { NameHolder } from "../components/NameHolder";
+import { NavBar } from "../components/navBar";
 
 
 export function GamePage(){
@@ -95,6 +96,7 @@ export function GamePage(){
         :
         (
             <div className="App">
+                <NavBar/>
                 <NameHolder color = {color! == 'WHITE'? 'BLACK' : 'WHITE'} name={opponent}/>
                 <ChessGame color={color!} roomId= {roomId!} socket = {socketRef.current!}/>
                 <NameHolder color = {color!} name = {localStorage.getItem('username') ?? 'Anonymous'}/>
