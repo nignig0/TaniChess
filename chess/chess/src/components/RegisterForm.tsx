@@ -15,6 +15,7 @@ export function RegisterForm(){
 
 
     const register = async()=>{
+        console.log('We here')
         try{
             if(isUsernameValid(username) && isPasswordValid(password, passwordConfirm) &&
                 isEmailVaid(email)){
@@ -26,7 +27,8 @@ export function RegisterForm(){
                     });
 
                     if(request.status == 200){
-                        const response = JSON.parse(request.data);
+                        console.log('Response -> ', request.data);
+                        const response = request.data;
                         const { token } = response.data.token;
 
                         localStorage.set('username', username);

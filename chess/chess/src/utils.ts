@@ -21,6 +21,5 @@ export const isPasswordValid = (password: string, passwordConfirm: string)=>{
 }
 
 export const isUsernameValid = (username:string)=>{
-    return username.length == 0;
+    return username.length != 0;
 }
-

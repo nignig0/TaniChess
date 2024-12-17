@@ -1,27 +1,20 @@
-import React from 'react';
-import axios from 'axios';
-import { API_BASE } from './App';
-import { useNavigate } from 'react-router-dom';
 import '../styles/createGameButton.css'
+import { createRoom } from '../apiUtils';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateRoomButton(){
-
     const navigate = useNavigate();
-
-    const createRoom = async ()=>{
-        try{
-            const request = await axios.post(`${API_BASE}/room`);
-            const response = request.data;
-            console.log('The response -> ', response);
-
-            navigate(`/${response.data._id}`);
-        }catch(err: any){
+    const action = async()=>{
+        const id = await createRoom();
+        if(!id){
             alert('An unexpected error occured');
-        } 
+            return;
+        }
+        navigate(`/${id!}`);
     }
-
+    
     return (
-        <button onClick = {createRoom}>
+        <button onClick = {action}>
             CREATE GAME!
         </button>
     );

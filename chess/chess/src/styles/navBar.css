@@ -15,4 +15,5 @@ ul{
 li{
     text-decoration: underline;
     font-weight: bold;
+    margin-left: 20px;
 }

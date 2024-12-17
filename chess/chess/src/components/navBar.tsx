@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/navBar.css';
+import { createRoom } from '../apiUtils';
 
 
 export function NavBar(){
@@ -11,10 +12,20 @@ export function NavBar(){
         navigate('/');
     }
 
+    const action = async()=>{
+        const id = await createRoom();
+        if(!id){
+            alert('An unexpected error occured');
+            return;
+        }
+        navigate(`/${id!}`);
+    }
+
     return (
         <nav>
             <ul>
-                <li><Link to='/lobby'>Lobby</Link></li>
+                <li onClick = {action}> Create Game</li>
+                <li onClick = {()=> navigate('/lobby')}>Lobby</li>
                 {loggedIn?
                 (
                     <li onClick = {logOut}>Log out</li>

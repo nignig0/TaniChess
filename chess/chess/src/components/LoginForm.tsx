@@ -15,7 +15,7 @@ export function LoginForm(){
             });
     
             if(request.status == 200){
-                const response = JSON.parse(request.data);
+                const response = request.data;
                 const { token } = response.data;
     
                 localStorage.setItem('username', username);
