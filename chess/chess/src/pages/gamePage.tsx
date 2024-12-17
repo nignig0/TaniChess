@@ -63,6 +63,7 @@ export function GamePage(){
         socketRef.current.addEventListener('open', ()=>{
         //send a message?
         const player = localStorage.getItem('username') ?? 'Anonymous';
+        console.log('The player front end-> ', player);
             console.log('Connected to the web socket server');
             socketRef.current!.send(JSON.stringify({
                 type: 'init',
