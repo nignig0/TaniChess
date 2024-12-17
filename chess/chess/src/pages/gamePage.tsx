@@ -57,6 +57,7 @@ export function GamePage(){
     }, []);
 
     useEffect(()=>{
+        if(!joinedRoom) return;
         console.log('Have we joined a room? ->', joinedRoom);
         socketRef.current = new WebSocket('wss://tanichess.onrender.com');
         socketRef.current.addEventListener('open', ()=>{
