@@ -64,7 +64,7 @@ wss.on('connection', (ws: WebSocket)=>{
             if(room!.players.length <= 1){
                 const gameResponse = {
                     type: MessageTypes.LOBBY_LISTENER,
-                    player: (!room!.players[0] || room!.players[0].username) ?? "Anonymous",
+                    player: player,
                     roomId: roomId,
                     color: room!.players[0].color
                 }
