@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { TokenService } from '../services/TokenService';
+import { JwtPayload } from 'jsonwebtoken';
 
 const handleToken = async(req: Request, res: Response, next: NextFunction)=>{
     const authHeader = req.headers.authorization;
@@ -12,7 +13,7 @@ const handleToken = async(req: Request, res: Response, next: NextFunction)=>{
         const token = authHeader.split(' ')[1];
         const decoded = await TokenService.verifyToken(token);
         console.log('The decoded -> ', decoded);
-        req.user = JSON.parse(decoded!.toString());
+        req.user = (decoded! as JwtPayload).user;
     }
     
     // if(!decoded){
