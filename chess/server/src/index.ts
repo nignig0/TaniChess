@@ -115,7 +115,7 @@ const corsOptions = {
   };
   
   // Use the CORS middleware
-  app.use(cors(corsOptions));
+  app.use(cors()); //temp removal for testing
 
 server.listen(port, ()=>{
     console.log(`Listening on port ${port}. Let's go chess server`)
