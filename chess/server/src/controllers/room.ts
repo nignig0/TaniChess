@@ -32,6 +32,7 @@ const joinRoom = async(req: Request, res: Response)=>{
     try{
         const { roomId } = req.params;
         const userId = req.user;
+        console.log('The userId -> ', userId);
         let username = 'Anonymous';
 
         if(userId){

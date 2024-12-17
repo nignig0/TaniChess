@@ -95,9 +95,12 @@ wss.on('connection', (ws: WebSocket)=>{
     });
 
     ws.on('close', ()=>{
-        //handle socket closing here
-        //loop through everything here and remove it from the
-        //lobby array if its there
+        const rooms = socketToRoomMap.get(ws) ?? [];
+        for(const room of rooms){
+            let message: Message;
+            if(room === MessageTypes.LOBBY_LISTENER){}
+
+        }
         console.log("Connection closed");
         //handle what happens if the client closes the connection 
         //or there's an error and the connection has to be closed.
