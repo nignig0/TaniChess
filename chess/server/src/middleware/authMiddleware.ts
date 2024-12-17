@@ -10,8 +10,8 @@ const handleToken = async(req: Request, res: Response, next: NextFunction)=>{
     // }
     if(authHeader && authHeader.startsWith('Bearer')){
         const token = authHeader.split(' ')[1];
-    const decoded = await TokenService.verifyToken(token);
-        //req.user = JSON.parse(decoded as string).userId;
+        const decoded = await TokenService.verifyToken(token);
+        req.user = decoded;
     }
     
     // if(!decoded){

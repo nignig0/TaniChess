@@ -35,7 +35,7 @@ const register = async(req: Request, res: Response)=>{
         const user = await UserService.createUser(username, email, hashedPassword);
         
 
-        const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET as string, { expiresIn: '24h' });
+        const token = jwt.sign(user._id.toString(), process.env.JWT_SECRET as string, { expiresIn: '24h' });
 
         res.status(200).send({
             message: 'Successfully registered user',
@@ -83,7 +83,7 @@ const login = async (req: Request, res: Response)=>{
             return;
         }
 
-        const token = jwt.sign({ userId: user!._id.toString() }, process.env.JWT_SECRET as string, { expiresIn: '24h' });
+        const token = jwt.sign(user!._id.toString(), process.env.JWT_SECRET as string, { expiresIn: '24h' });
 
         res.status(200).send({
             message: "Successfully logged in",
