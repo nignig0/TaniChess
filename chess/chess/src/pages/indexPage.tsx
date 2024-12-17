@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateRoomButton } from "../components/createRoom";
 import { LoginForm } from "../components/LoginForm";
 import '../styles/index.css';
@@ -10,7 +10,12 @@ export function Index(){
     const changeForm = async()=> setShowLoginForm(!showLoginForm);
     const navigate = useNavigate();
 
-    if(localStorage.getItem('token')) navigate('/lobby');
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          navigate('/lobby');
+        }
+      }, [navigate]);
     return (
         <div className='body'>
             <h1>64 Squares</h1>
