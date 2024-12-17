@@ -47,7 +47,10 @@ wss.on('connection', (ws: WebSocket)=>{
             canPlay: rawData.canPlay,
             move: rawData.move,
             roomId: rawData.roomId,
-            fen: rawData.fen
+            fen: rawData.fen,
+            player: rawData.player,
+            color: rawData.color,
+            lobbyGames: rawData.lobbyGames
         };
         console.log('The message -> ', data);
         const { type, roomId, player } = data;
