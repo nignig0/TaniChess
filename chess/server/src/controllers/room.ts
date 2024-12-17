@@ -39,6 +39,7 @@ const joinRoom = async(req: Request, res: Response)=>{
             const user = await UserService.findById(userId);
             username = user!.username;
         }
+        console.log('The username -> ', username);
         const playerData = await RoomService.joinRoom(roomId, username);
 
         res.status(200).send({
